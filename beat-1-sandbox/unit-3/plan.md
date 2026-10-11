@@ -94,3 +94,7 @@ Two differences in how I built it, neither of which changed the plan:
 - Claude Code first wrote the non-breaking spaces in the new test as literal U+00A0 characters, not as the \u00a0 escape in the plan. I replaced them with the escape before committing.
 
 Not done yet: lint and type checks (ruff, black and mypy are not installed here, so they will only run in CI), and I did not check whether the chunkers read detected_sections. The posted plan comment on #54 is still accurate, so no follow-up comment is needed.
+
+**Added in Unit 4 (Oct 8, 2026):** one change outside this plan. Commit `fea03b4` changes the comment above the patterns in `_detect_sections()` (`resume_parser.py`, line 132) from `# Look for section header patterns` to `# Look for section header patterns; allow indentation, but not line breaks`. Comment only, no code change. After it, `tests/unit/test_resume_parser.py` still shows 12 passed, and `make test-unit` still shows 6 failed, 376 passed, 48 xfailed (the same 6 pytest-asyncio failures).
+
+**Update (Oct 10, 2026):** the "Not done yet" note above is out of date. I installed ruff, black and mypy in my local `.venv` and ran them on `fea03b4`: `ruff check .` passes; `black --check` passes on the 2 changed files; `mypy` passes on `resume_parser.py`. The full results, and what still does not pass locally outside this change, are in the PR description.

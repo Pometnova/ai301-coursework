@@ -1,0 +1,26 @@
+# Rubric: is this pull request ready to submit?
+
+Each check answers one question about the PR package. Grade the thing
+itself, never the write-up's shape. Locations named in the Evidence
+column are defined in `references/evidence-guide.md`.
+
+## Checks
+
+| Check | Evidence | Pass condition | Weight |
+|---|---|---|---|
+| matches-plan | The diff's changed files and hunks, read against the plan context: its Files list, its change steps, and its "not in scope" line. Also any deviation note in the plan or the PR description. | **Pass** if every changed file and hunk serves a change step in the plan or is named in a deviation note, and every change step in the plan appears in the diff or is named as left out or deferred. **Fail** if the diff changes a file or behavior that the plan does not name, or that the plan lists as not in scope, with no deviation note; or if a change step is missing from the diff with nothing saying so. | required |
+| description-faithful | The PR description, read against the diff and the plan context (including any deviation notes). | **Pass** if every change the description claims is present in the diff, and every change the diff makes that is outside the plan is disclosed in the description. **Fail** if the description claims something the diff doesn't include or contradicts, or if the diff makes a change outside the plan that the description doesn't mention. | required |
+| before-after-shown | The PR's test evidence, read against the plan's test plan and the repro evidence in the plan context. | **Pass** if the test evidence shows every test in the plan's test plan that re-runs a reproduced failure being run, with the actual after-output visible, the before-output visible here or in the repro evidence, and each after-result matches the plan's expected-after. **Fail** if the evidence only claims success (like "tests pass" or "verified"), if the before or after output is missing from both places, or if an after-result doesn't match the expected-after. Checks beyond the repro tests are graded by repo-checks-run, not here. | required |
+| repo-checks-run | The PR's test evidence, read against the plan's test plan (checks beyond the repro tests) and the repo-facts block (any checks the repo asks contributors to run). | **Pass** if every check that the repo or the plan asks for either shows its actual output, names a specific observed result (what was run and what it showed), or is named as not run with a reason. **Fail** if a check the repo or plan asks for is not mentioned at all, or the evidence for it is only a generic claim ("tests pass", "verified", "works") that names no command or result. | required |
+| diff-clean | Every added and removed line in the diff, read against the plan's change steps and any deviation note. | **Pass** if every line the diff adds or removes is part of the planned change, a test for it, or a change named in a deviation note. **Fail** if the diff contains debug statements, commented-out or dead code, formatting changes to lines the fix doesn't touch, or files unrelated to the fix (like scratch files or editor settings). | required |
+| template-filled | The PR description, read against the repo-facts block's PR-template asks (its sections, checklist, and issue-link line). | **Pass** if the repo-facts block says the repo has no PR template, or if every section of the template has been filled in (not left empty or as the template's placeholder text), every checklist item is either checked or left unchecked with a stated reason, and the issue is linked where the template asks for it. **Fail** if a template section is empty or still shows placeholder text, a checklist item is left unchecked with no reason given, or the issue link the template asks for is missing. | required |
+| ai-disclosure | The PR description, read against the repo-facts block's contribution and AI-use policy and the PR template's sections. | Treat every package as AI-assisted work: never decide that a disclosure rule does not apply because nothing shows AI was used. **Pass** if the repo-facts block shows no AI policy and the template has no AI-disclosure section, or if the PR description contains an AI-use disclosure that meets what the policy or template asks for (for example, naming the AI tool and the type and extent of help). **Fail** if the repo states an AI policy or the template has a disclosure section, and the description has no disclosure, or a disclosure that omits something the policy requires. | required |
+| title-clear | The PR title. | **Pass** if the title names what changed and where it changed (a file, function, feature, or area). **Fail** if the title names neither what changed nor where (like "fix bug", "update code"), or names the area but not what changed. | preferred |
+
+## Verdict rule
+
+- **accept** if every `required` check passes.
+- **reject** if any `required` check fails or is `unclear`.
+- `preferred` checks never change the verdict; report them in the summary only.
+- `unclear` is allowed only when the evidence a check needs is absent from the package (the section is missing or empty). When the evidence is present, choose pass or fail, even if the call is close.
+- Each check is graded on its own. A failure on one check never changes the grade of another.
