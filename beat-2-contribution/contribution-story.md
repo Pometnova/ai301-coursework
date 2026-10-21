@@ -55,10 +55,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Installed the issue-scout over my Unit 1 skill and wrote my first search strategy**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I wrote three search queries from my fit profile (Excel, SQL, and four named data tools) and eight ranking filters, then ran one scan: 300 results, 83 after ranking, 5 graded, 3 accepted. Testing the queries before the scan caught two mistakes: quoting "excel OR xlsx" made gh search for one exact phrase (0 results), and --owner apache pulled in unrelated Apache projects, so I removed the quotes and switched to --repo. The scan ranked a 2018 pandas issue first, so I added a free ranking rule that drops issues older than two years. It also accepted a personal 18-star repo; I left that unfixed because search results have no star count, so that check would belong in the rubric, not the strategy.
 
 **Unit 6: [one line on the tool work]**
 
