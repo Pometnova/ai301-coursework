@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Translate Peng Ding's Linear Models book into pyfixest
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -7,11 +7,10 @@ the repository is not read. **Keep every section header below under its exact na
 format criteria grade exactly that. Your course repo link is the whole submission: no tool
 files and no evidence uploads are part of Assignment 5.
 
-**Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
-**Issue:** [GitHub issue link]
+**Contribution Number:** 1
+**Student:** Olena Pometnova
+**GitHub Username:** Pometnova
+**Issue:** https://github.com/py-econometrics/pyfixest/issues/957
 **Pull Request:** [GitHub PR link, once opened]
 
 One repository, built across units 5 to 8, telling the whole story of your real
@@ -83,13 +82,15 @@ In Unit 5, I ran my scout's search: three queries returned 300 results, and 83 w
 
 I returned to the Issue Selection site and chose 18 candidates from Apache AGE and Airflow. I used Claude to check their GitHub threads, and almost every one already had a claim comment, an open pull request, was too large, or was more than two years old, which my own ranking rule filters out. Claude then scanned the rest of the site for data-tool issues and found pyfixest #957. It asks contributors to rewrite the R examples from Peng Ding's open-access textbook *Linear Model and Extensions* in Python with pyfixest, as documentation pages. My scout rejected it on two checks: scope-feasible failed because the issue covers the whole book, and unclaimed failed because an open pull request (#1592) is linked to it.
 
+I still chose #957 because I only claimed one chapter of the book, Chapter 2, and not the entire book. The open pull request #1592 is for Chapter 6, so it doesn't overlap with my work. The issue also had no comments or assignee. This work aligns with my goal as a data analyst. Chapter 2 is about simple linear regression: one variable explains another. I'll run the R code from the book, then write the same analysis in Python using pyfixest's `feols` function and check that the coefficients and standard errors match R's. The result will be a documentation page on the pyfixest website written in Quarto, so I'll also learn how documentation is created and tested in a real project. My scout looked at the entire issue, not just my chapter. It saw a book with multiple chapters and said the work was too large. It also saw an open pull request and said someone had already taken the issue, but that pull request is for a different chapter. My claim comment: https://github.com/py-econometrics/pyfixest/issues/957#issuecomment-6460279179
+
+
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout in direct mode (`issue-scout: grade <URL>`), after this week's scope patch. I graded #957 and re-graded #4420.
+- What it produced: reject for #957 (`scope-feasible`: the issue covers the whole book; `unclaimed`: open PR #1592). Reject for #4420 (`unclaimed`: assigned to another contributor), which had been an accept on October 21.
+- Difficulties: the scout grades the whole issue, so it rejects an umbrella issue even when I claim one part of it. Its `unclaimed` check cannot tell that PR #1592 is about a different chapter.
+- What changed: I replaced my `scope-fits` check with `scope-feasible`, which adds a difficulty note instead of rejecting issues with open edges. I would also change `unclaimed` so it checks whether a linked PR covers the same part I want to claim.
 
 ---
 
