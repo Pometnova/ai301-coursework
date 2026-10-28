@@ -58,11 +58,9 @@ one in the week it belongs to.
 
 I wrote three search queries from my fit profile (Excel, SQL, and four named data tools) and eight ranking filters, then ran one scan: 300 results, 83 after ranking, 5 graded, 3 accepted. Testing the queries before the scan caught two mistakes: quoting "excel OR xlsx" made gh search for one exact phrase (0 results), and --owner apache pulled in unrelated Apache projects, so I removed the quotes and switched to --repo. The scan ranked a 2018 pandas issue first, so I added a free ranking rule that drops issues older than two years. It also accepted a personal 18-star repo; I left that unfixed because search results have no star count, so that check would belong in the rubric, not the strategy.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice guard and wrote a memory file for my pyfixest clone**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I merged my three voice-guide copies into one file, added rules for claims, questions, and pings, and installed the guard as a hook. The wiring test was blocked, so I knew the hook runs before any comment goes out. My rule on completion dates was too broad: repro-check flagged "by Monday" in my claim, even though it was only a report-back date, so I removed the date before posting. I also wrote a 33-line CLAUDE.local.md from one scoped run over the docs folder, and kept it out of git with .git/info/exclude.
 
 **Unit 7: [one line on the tool work]**
 
