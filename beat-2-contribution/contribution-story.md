@@ -123,31 +123,29 @@ I still chose #957 because I only claimed one chapter of the book, Chapter 2, an
 
 **Environment Setup**
 
-[What a stranger would need to stand this up: your operating system,
-the relevant versions (language, runtime, package manager, the project
-itself), and how you set the project up. Then the challenges you faced
-and how you solved them, or that none came up.]
+macOS 26.6.2 on an Apple-silicon (arm64) Mac, Python 3.12.7. I made a fresh virtual environment (`.venv-957`) so nothing from my other projects affects the result, then ran `pip install pyfixest`, which installed pyfixest 0.60.0, pandas 3.1.0, and numpy 2.5.4. I used pip instead of the repo's pixi setup for this first check, because I only needed `pf.feols` on a CSV file. I will set up pixi when I build the docs page. No problems came up. Matplotlib built its font cache on the first run, which only made that run slower.
 
 **Steps to Reproduce**
 
-1. [Step 1]
-2. [Step 2]
-3. [Observed result]
+1. Create and activate a fresh environment: `python3 -m venv .venv-957`, then `source .venv-957/bin/activate`.
+2. Install pyfixest: `pip install pyfixest`.
+3. Load Galton's data and fit the chapter 2 regression in `repro_ch2.py`: `df = pd.read_csv(URL)` with the Rdatasets GaltonFamilies CSV, then `pf.feols("childHeight ~ midparentHeight", data=df)` and `print(fit.coef())`.
+4. Run `python repro_ch2.py` and compare the coefficients with chapter 2 of Peng Ding's *Linear Model and Extensions*.
+5. Observed result: 934 rows. Intercept 22.636241 and slope 0.637361. The book prints 22.63624 and 0.6373609, so both match to every printed digit.
 
 **Reproduction Evidence**
 
-- **Commit showing reproduction:** [link to commit in your fork]
-- **Screenshots/logs:** [if applicable]
-- **My findings:** [what you discovered during reproduction; an
-  honest, evidenced cannot-reproduce that led you to re-pick or ask
-  the maintainer belongs here and costs you nothing]
+- **Commit showing reproduction:** none. This check ran outside my pyfixest fork.
+- **Screenshots/logs:** output of `python repro_ch2.py`:
+  `(934, 9)` / `Intercept 22.636241` / `midparentHeight 0.637361`
+- **My findings:** The gap is real: pyfixest's docs/textbook-replications/ folder has no page for Ding's book, and chapter 6 is only in open PR #1592. The chapter 2 example is reproducible with pyfixest. Chapter 2 prints coefficients only, not standard errors, so I compared coefficients only. I loaded the data from the public Rdatasets CSV, which is the same data as the R package HistData the book uses; I have not opened the book's Dataverse files yet, so I will check them against this CSV before I build the page.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: repro-check, run on my claim draft and my repro report together.
+- What it produced: accept, with all 7 checks passing, including behavior-matches (my output next to the book's values) and claims-backed (the standard-error promise from my claim honestly walked back).
+- Difficulties: on my first claim draft, it flagged "I'll report what I find here by Monday" as a completion date, even though it was only a report-back date.
+- What changed: I removed the date from my claim. In the repro, I stated plainly that chapter 2 has no standard errors, instead of leaving my claim's promise open.
 
 ---
 
