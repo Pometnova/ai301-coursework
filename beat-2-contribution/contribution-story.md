@@ -79,16 +79,9 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+In Unit 5, I ran my scout's search: three queries returned 300 results, and 83 were left after ranking. My scout graded 5 and accepted 3. I decided to work on apache/datafusion-comet #4420, a Claude skill for reviewing documentation. My scout graded it directly on October 21 and accepted it, but that same evening another contributor left a "take" comment on GitHub and was assigned to it. I realized that a shortlist goes out of date quickly, and that grading and claiming an issue should happen at the same time.
+
+I returned to the Issue Selection site and chose 18 candidates from Apache AGE and Airflow. I used Claude to check their GitHub threads, and almost every one already had a claim comment, an open pull request, was too large, or was more than two years old, which my own ranking rule filters out. Claude then scanned the rest of the site for data-tool issues and found pyfixest #957. It asks contributors to rewrite the R examples from Peng Ding's open-access textbook *Linear Model and Extensions* in Python with pyfixest, as documentation pages. My scout rejected it on two checks: scope-feasible failed because the issue covers the whole book, and unclaimed failed because an open pull request (#1592) is linked to it.
 
 **Toolkit**
 
