@@ -96,29 +96,28 @@ I still chose #957 because I only claimed one chapter of the book, Chapter 2, an
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+Issue #957 asks for the R examples in Peng Ding's open-access book *Linear Model and Extensions* to be rewritten in Python with pyfixest. The docs folder `docs/textbook-replications/` has pages for other books but nothing for chapter 2 of this book. Chapter 6 is only in open PR #1592.
 
 **Expected Behavior**
 
-[What should happen?]
+A docs page shows the chapter 2 example in pyfixest: it loads the book's Galton data, computes the OLS line with the book's formula and with `pf.feols`, and gets the same coefficients the book prints (22.63624 and 0.6373609).
 
 **Current Behavior**
 
-[What actually happens?]
+There is no chapter 2 page. A reader who wants this example in Python has only the book's R script, `chapter02.R`.
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+`docs/textbook-replications/` (a new page, `ding_chapter02.qmd`). The page uses `pf.feols` and `.coef()`. No Python code in the package changes.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: Claude Code with my CLAUDE.local.md from unit 6. I used it to read the issue thread, PR #1592, and the repo's testing policy, then compared the book's data file with the Rdatasets CSV.
+- What it produced: the gap (no chapter 2 page; chapter 6 only in open PR #1592), the book's data file on Dataverse (fileId 10123762), and a match: 934 rows, largest difference 1.4e-14, coefficients 22.636241 and 0.637361 from both the book's formula and `pf.feols`.
+- Difficulties: my CLAUDE.local.md marked the single-page render command as "NOT VERIFIED," and pixi 0.83 rewrote `pixi.lock` on the first run.
+- What changed: I verified the render command and added `--frozen`, taken from the repo's CI settings, so `pixi.lock` stays untouched.
 
 ---
-
 ## Reproduction Process
 
 **Environment Setup**
@@ -138,7 +137,8 @@ macOS 26.6.2 on an Apple-silicon (arm64) Mac, Python 3.12.7. I made a fresh virt
 - **Commit showing reproduction:** none. This check ran outside my pyfixest fork.
 - **Screenshots/logs:** output of `python repro_ch2.py`:
   `(934, 9)` / `Intercept 22.636241` / `midparentHeight 0.637361`
-- **My findings:** The gap is real: pyfixest's docs/textbook-replications/ folder has no page for Ding's book, and chapter 6 is only in open PR #1592. The chapter 2 example is reproducible with pyfixest. Chapter 2 prints coefficients only, not standard errors, so I compared coefficients only. I loaded the data from the public Rdatasets CSV, which is the same data as the R package HistData the book uses; I have not opened the book's Dataverse files yet, so I will check them against this CSV before I build the page.
+- **My findings:** The gap is real: pyfixest's docs/textbook-replications/ folder has no page for Ding's book, and chapter 6 is only in open PR #1592. The chapter 2 example is reproducible with pyfixest. Chapter 2 prints coefficients only, not standard errors, so I compared coefficients only. I loaded the data from the public Rdatasets CSV, which is the same data as the R package HistData the book uses. I have not opened the book's Dataverse files yet, so I will check them against this CSV before I build the page.
+- Update 2026-10-29: I checked the book's Dataverse file (GaltonFamilies.txt, fileId 10123762): 934 rows, the same values as the Rdatasets CSV (largest difference 1.4e-14), and the same coefficients. I posted the comparison on the issue: https://github.com/py-econometrics/pyfixest/issues/957#issuecomment-6509857306
 
 **Toolkit**
 
@@ -153,29 +153,32 @@ macOS 26.6.2 on an Apple-silicon (arm64) Mac, Python 3.12.7. I made a fresh virt
 
 **Analysis**
 
-[Your analysis of the root cause: what is causing the issue, traced
-to the files and functions involved.]
+The gap is in `docs/textbook-replications/`: it has pages for the Mixtape, *The Effect*, and *Causal Inference: The Brave and True*, but nothing for chapter 2 of Ding's book. The book's `chapter02.R` reads `GaltonFamilies.txt` with `read.table`, computes the means, standard deviations, and correlation of `midparentHeight` and `childHeight`, sets the slope to `cor × sd_y / sd_x` and the intercept to `mean_y − slope × mean_x`, and draws a ggplot scatter plot with the fitted line. Each step has a direct Python match: `pd.read_csv` for the data, pandas for the formula, `pf.feols("childHeight ~ midparentHeight")` for the model, and matplotlib for the plot.
 
 **Proposed Solution**
 
-[High-level description of your fix approach, and what you are
-deliberately NOT changing.]
+Add one page, `docs/textbook-replications/ding_chapter02.qmd`. It loads `GaltonFamilies.txt` from the book's Dataverse files (fileId 10123762), with an explicit user agent the same way #1592 does. It computes OLS with the book's formula, fits the same model with `pf.feols`, shows that both match the book's printed values, and draws the scatter plot with the fitted line in matplotlib. I write the page text in my own words and do not copy the book.
+
+I will not change: `_quarto.yml`, `index.qmd`, `resources.qmd`, or `ding_linear_models.qmd` (to avoid a conflict with #1592); any Python code in `pyfixest/`; `pixi.lock`; or rendered output in `docs/_freeze/`.
+
+Because I don't edit `index.qmd`, the page won't appear in the Textbook Replications list yet. I'll add it there in a follow-up after #1592 merges, or move chapter 2 into `ding_linear_models.qmd` if the maintainers prefer.
 
 **Implementation Plan**
 
-1. [Modify file X to do Y]
-2. [Add or change Z]
-3. [Update tests]
-
-[Record deviations here as they happen: what changed mid-build and
-why. A recorded deviation is honest work; silent drift is not.]
+1. Create branch `docs/ding-chapter-2` from `master`.
+2. Add `ding_chapter02.qmd` with a title, a short intro (book, Dataverse DOI, CC0 license, link to #957), and a setup cell.
+3. Add a cell that loads GaltonFamilies from Dataverse. (fileId 10123762 is `GaltonFamilies.txt` in the book's Dataverse files. I checked the file page title and compared the file with the Rdatasets CSV: 934 rows, same values.)
+4. Add a cell with the book's formula: means, standard deviations, correlation, slope, intercept.
+5. Add a cell with `pf.feols` and a comparison to the formula and the book's printed values.
+6. Add a matplotlib cell: a jittered scatter plot (fixed seed) with the fitted line.
+7. Test: before the change, rendering `ding_chapter02.qmd` fails because the page doesn't exist. After the change, `pixi run --frozen -e docs quarto render docs/textbook-replications/ding_chapter02.qmd` runs every cell, and the coefficients are 22.636241 and 0.637361, matching the book's 22.63624 and 0.6373609. Also run `pixi run --frozen lint` and `git diff --check master...HEAD`. I checked this render command on master with an existing page, `mixtape.qmd`, on 2026-10-29: all cells ran and the HTML was built. I haven't run it on the new page yet.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: plan-check, run on plan.md and a draft plan comment (not posted) for issue #957.
+- What it produced: accept, with all 8 checks passing. The first run was also accept, but it listed three gaps: the plan didn't say the page would be missing from the index list, the render command looked unverified, and the Dataverse fileId wasn't tied to a check.
+- Difficulties: my procedure.md assumes a bug with failing runs and controls, so plan-check had to improvise for a docs addition. It also read the old "NOT VERIFIED" note in my CLAUDE.local.md.
+- What changed: I added the index-list deferral, the fileId check, and the mixtape render check to plan.md and the comment, and updated CLAUDE.local.md. I would add a docs-addition case to procedure.md.
 
 ---
 
