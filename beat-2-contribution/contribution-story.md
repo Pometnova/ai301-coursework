@@ -184,42 +184,52 @@ Because I don't edit `index.qmd`, the page won't appear in the Textbook Replicat
 
 ## Testing Strategy
 
-[What observable checks prove the fix: your reproduction steps re-run
-against the built change (before and after), and the repo's own test
-suite or checks with the outcome shown. "Tests pass" with nothing
-observable named is not a strategy.]
+I test the page the way pyfixest's testing policy (docs/developer/testing.md) asks for rendered content under docs/: render the affected page, run the repo's lint, and check the diff for whitespace problems. These are the three rows in my ship manifest.
+
+Before the change, `pixi run --frozen -e docs quarto render docs/textbook-replications/ding_chapter02.qmd` fails with `ERROR: No valid input files passed to render`, because the page doesn't exist on master. After the change, the same render runs all 5 cells and builds the HTML page. The page prints intercept 22.636241 and slope 0.637361 from the book's formula, and `pf.feols` gives the same values. The book prints 22.63624 and 0.6373609, so all three match to every printed digit.
+
+`pixi run --frozen lint` passes all 18 hooks, including "don't commit to branch", which fails on master by design. `git diff --check master...HEAD` finds no whitespace problems. I didn't run the full `docs-render` or `test-py`: the testing policy asks for a full render only for site-wide changes, and no Python code in `pyfixest/` changes. The page's `pf.feols` call still runs in the page render.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: my ship manifest (three checks taken from the repo's own docs and CI), run by hand on the branch before the ship-gate.
+- What it produced: all three checks pass on docs/ding-chapter-2: render 5/5 cells, lint 18/18 hooks, no whitespace problems.
+- Difficulties: the render failed with `No module named 'pyfixest'` even though pyfixest was installed. On my Mac, `pixi run` marks the editable-install file `pyfixest.pth` as hidden, and Python 3.12 skips hidden .pth files. Also, on my first run pixi 0.83 rewrote `pixi.lock` (3,950 lines), because CI uses pixi 0.76.2.
+- What changed: I added `PYTHONPATH="$PWD"` to the render row and `--frozen` to every pixi row, and wrote the reasons in the manifest's Source column.
 
 ---
 
 ## Implementation Notes
 
-[A running log, added to as you work. Date each entry. What you
-built, decisions you made when you made them, wrong turns included.]
+**2026-10-29: setup**
 
-**[Date]**
+I installed the ship-gate and pixi 0.83. My first pixi run rewrote `pixi.lock` because CI uses pixi 0.76.2. I restored the file and added `--frozen`, which CI also uses (`frozen: true`). On master, lint failed only on "don't commit to branch", which is expected there.
 
-[Entry]
+**2026-10-29: data check and follow-up comment**
 
-**[Date]**
+I downloaded the book's `GaltonFamilies.txt` from Dataverse (fileId 10123762) and compared it with the Rdatasets CSV: 934 rows, largest difference 1.4e-14, same coefficients. I posted the comparison on the issue and corrected my claim about standard errors: https://github.com/py-econometrics/pyfixest/issues/957#issuecomment-6509857306
 
-[Entry]
+**2026-10-29: where the page goes**
+
+No maintainer answered my question about adding chapter 2 to the file in #1592. I chose a separate page, `ding_chapter02.qmd`, and left the navigation files alone, so my PR doesn't conflict with #1592.
+
+**2026-10-29: render bug**
+
+The first render failed with `No module named 'pyfixest'`. Python found pyfixest from the repo root but not from `docs/textbook-replications/`, where Quarto starts the kernel. `ls -lO` showed the `hidden` flag on `pyfixest.pth`. `chflags nohidden` fixed it only until the next `pixi run`, which set the flag again. Running the env's Python directly, without `pixi run`, worked. I now render with `PYTHONPATH="$PWD"`.
+
+**2026-10-29: building the page**
+
+I built the page in three commits: data loading, the OLS line by formula and with `pf.feols`, and the plot. I kept the R script's variable names (`center_x`, `rho_xy`, `beta_fit`) so a reader can match R and Python line by line. Review of the rendered page found two problems: the fitted-line label ran past the plot's right edge, and the formula cell printed `np.float64(...)`. I anchored the label inside the plot box and printed plain numbers in a fourth commit.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: Claude, linked to my computer. It drafted each part of the page; I compared every line with `chapter02.R`, rendered the page after each part, and committed it myself.
+- What it produced: the page in three parts, plus fixes for the label and the printed numbers.
+- Difficulties: the first plot draft put the label at the book's x=72, which ran past the plot box in matplotlib, and the formula cell showed numpy's `np.float64` labels. Both looked fine in the code and only showed up on the rendered page.
+- What changed: I now open the rendered HTML after every render, not only the cell log.
 
 ---
-
+  
 ## Pull Request
 
 **PR Link:** [GitHub PR URL when opened]
