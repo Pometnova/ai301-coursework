@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Olena Pometnova
 **GitHub Username:** Pometnova
 **Issue:** https://github.com/py-econometrics/pyfixest/issues/957
-**Pull Request:** [GitHub PR link, once opened]
+**Pull Request:** https://github.com/py-econometrics/pyfixest/pull/2015
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -62,10 +62,9 @@ I wrote three search queries from my fit profile (Excel, SQL, and four named dat
 
 I merged my three voice-guide copies into one file, added rules for claims, questions, and pings, and installed the guard as a hook. The wiring test was blocked, so I knew the hook runs before any comment goes out. My rule on completion dates was too broad: repro-check flagged "by Monday" in my claim, even though it was only a report-back date, so I removed the date before posting. I also wrote a 33-line CLAUDE.local.md from one scoped run over the docs folder, and kept it out of git with .git/info/exclude.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Installed the ship-gate and wrote a manifest from pyfixest's own testing policy**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+My manifest has three checks taken from pyfixest's docs and CI (lint, `git diff --check`, and a single-page Quarto render) and two dated exclusions, the full `docs-render` and `test-py`, backed by docs/developer/testing.md. Two rows fought me: pixi 0.83 rewrote `pixi.lock`, so I added `--frozen` from the CI settings, and the render failed with `No module named 'pyfixest'` because `pixi run` marks `pyfixest.pth` as hidden on my Mac, so I added `PYTHONPATH="$PWD"`. On my real branch the gate passed: 3 repo checks ok and my pr-precheck accepted all 8 checks. Its voice notes made me rewrite my AI-use line so it only claims what my evidence shows.
 
 **Unit 8: [one line on the tool work]**
 
@@ -232,27 +231,22 @@ I built the page in three commits: data loading, the OLS line by formula and wit
   
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/py-econometrics/pyfixest/pull/2015
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** The PR adds `docs/textbook-replications/ding_chapter02.qmd`, a page that replicates chapter 2 of Ding's *Linear Model and Extensions* (Galton's regression). It loads the book's data from Dataverse, computes the OLS line with the book's formula and with `pf.feols`, and plots it; both give 22.636241 and 0.637361, matching the book's 22.63624 and 0.6373609. It links the issue as "Part of #957" instead of "Fixes #957", because #957 covers the whole book and "Fixes" would close it on merge. It says the page isn't in `index.qmd` yet, to avoid a conflict with #1592, and offers to add it later. The Verification section lists the three checks that passed and the two not run, with reasons. It discloses AI use in my own words. I opened it as a draft PR, because pyfixest's git-and-pr-style.md asks for draft PRs for AI-assisted work.
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-10-31: none yet. The PR opened as a draft today.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: the ship-gate, run by hand with `check_gate.py --branch` on docs/ding-chapter-2, then again as a hook when Claude Code ran `gh pr create`.
+- What it produced: PASS. The 3 repo checks were ok (lint 1s, whitespace 0s, render 19s), and my pr-precheck accepted all 8 checks. Its voice notes flagged two overclaims in my AI-use line: "every line" and "after each change" had no evidence in the package.
+- Difficulties: at PR time, Claude Code first passed a body file path with a shell variable, which the gate couldn't read, so it stopped the PR. Claude Code also added a "Generated with Claude Code" line to the PR body without asking. I removed it with `gh pr edit 2015 --body-file pr_draft.md`.
+- What changed: I rewrote the AI-use line to name what I chose and checked. Next time I'll tell Claude Code to pass `pr_draft.md` unchanged.
 
 ---
 
