@@ -219,6 +219,14 @@ The first render failed with `No module named 'pyfixest'`. Python found pyfixest
 
 I built the page in three commits: data loading, the OLS line by formula and with `pf.feols`, and the plot. I kept the R script's variable names (`center_x`, `rho_xy`, `beta_fit`) so a reader can match R and Python line by line. Review of the rendered page found two problems: the fitted-line label ran past the plot's right edge, and the formula cell printed `np.float64(...)`. I anchored the label inside the plot box and printed plain numbers in a fourth commit.
 
+**2026-10-31: opening the PR**
+
+The ship-gate passed on my branch, so I opened PR #2015 as a draft and linked it as "Part of #957". pyfixest's git-and-pr-style.md asks for draft PRs for AI-assisted work.
+
+**2026-10-31: after the PR**
+
+I checked how fast pyfixest answers outside contributors and set a 14-day wait in my playbook, counted from when I mark the PR ready. The PR-monitor read a quiet thread with 1 check passing and drafted a wait note, so I posted nothing.
+
 **Toolkit**
 
 - Tool: Claude, linked to my computer. It drafted each part of the page; I compared every line with `chapter02.R`, rendered the page after each part, and committed it myself.
@@ -253,25 +261,32 @@ I built the page in three commits: data loading, the OLS line by formula and wit
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+- Rebuilding an R analysis in Python: I matched the book's `chapter02.R` step by step, computed the OLS line with the book's formula and with `pf.feols`, and checked both against the book's printed coefficients.
+- Working inside a real project's docs: a Quarto page, a single-page render with pixi, the repo's 18 lint hooks, and `--frozen` so my setup doesn't change `pixi.lock`.
+- Debugging an environment problem: the render said `No module named 'pyfixest'` even though it was installed. I found the `hidden` flag on `pyfixest.pth` with `ls -lO` and fixed the render with `PYTHONPATH="$PWD"`.
+- The pull request flow on a fork: a feature branch, a draft PR, and "Part of #957" instead of "Fixes #957", so merging my chapter doesn't close the whole issue.
+- Using a repo's own rules and data to decide: testing.md set my checks, git-and-pr-style.md set when to mark the PR ready, and the repo's PR history set my 14-day wait.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+- I lost my first issue. Comet #4420 was claimed by someone else on the same evening my scout accepted it. I moved to pyfixest #957 and claimed one chapter right away.
+- Open PR #1592 was already working on the same book. I put chapter 2 in its own page and left the navigation files alone, so the two PRs can't conflict.
+- The render bug and the `pixi.lock` rewrite both came from my Mac setup, not my page. I fixed each one and wrote the reason into my ship manifest, so the fix is repeatable.
+- My first count of pyfixest's review speed was wrong: the newest merged PRs were all the maintainer's own, and bot comments looked like instant replies. I filtered to outside contributors and human replies before I picked a number.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+- Grade and claim an issue on the same day. A shortlist goes out of date in hours.
+- Check how fast a repo answers outside contributors before I choose an issue, not after I open the PR. Here, the other #957 PRs have waited 41 days.
+- Open the rendered page after every render. Two of my bugs only showed up on the page, not in the code.
 
 ---
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
-
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- Peng Ding, *Linear Model and Extensions* (chapter 2 and `chapter02.R`): https://arxiv.org/abs/2401.00649
+- The book's data files on Harvard Dataverse (`GaltonFamilies.txt`, fileId 10123762): https://doi.org/10.7910/DVN/DBDYVJ
+- Issue #957 and my claim and data-check comments: https://github.com/py-econometrics/pyfixest/issues/957
+- PR #1592, which showed how a Ding page loads Dataverse data and which files to avoid: https://github.com/py-econometrics/pyfixest/pull/1592
+- pyfixest testing policy, which set my three checks: https://github.com/py-econometrics/pyfixest/blob/master/docs/developer/testing.md
+- pyfixest git and PR style guide, which says to open AI-assisted work as a draft: https://github.com/py-econometrics/pyfixest/blob/master/docs/developer/git-and-pr-style.md
