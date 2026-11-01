@@ -66,10 +66,9 @@ I merged my three voice-guide copies into one file, added rules for claims, ques
 
 My manifest has three checks taken from pyfixest's docs and CI (lint, `git diff --check`, and a single-page Quarto render) and two dated exclusions, the full `docs-render` and `test-py`, backed by docs/developer/testing.md. Two rows fought me: pixi 0.83 rewrote `pixi.lock`, so I added `--frozen` from the CI settings, and the render failed with `No module named 'pyfixest'` because `pixi run` marks `pyfixest.pth` as hidden on my Mac, so I added `PYTHONPATH="$PWD"`. On my real branch the gate passed: 3 repo checks ok and my pr-precheck accepted all 8 checks. Its voice notes made me rewrite my AI-use line so it only claims what my evidence shows.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Installed the PR-monitor and wrote a playbook from pyfixest's own review rhythm**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+I set my playbook's 14-day threshold from pyfixest's PR history: outside contributors' merged PRs got a first reply within about a day, but the other #957 chapter PRs (#1592, #1594) had waited 41 days with no reply. My first count was wrong, because the 20 newest merged PRs were all the maintainer's own and bot comments looked like instant replies, so I filtered to outside authors and human replies. The monitor reads whether a PR is a draft but doesn't use it, and counts quiet days from the day the PR opened, so I added a rule from pyfixest's git-and-pr-style.md: no nudge while the PR is a draft, and I mark it ready only when CI checks pass. The full run on #2015 read a quiet thread with 1 check passing and drafted a wait note, so I posted nothing; it also caught that my PR description still says "CI has not run yet".
 
 ---
 
